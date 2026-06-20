@@ -4,307 +4,437 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Rainford 的早报｜2026-06-20</title>
-  <meta name="description" content="Rainford 的早报：手机微信专用的博客正文、语音朗读和新闻模块。">
+  <meta name="description" content="Rainford 的早报：黑色 Apple 风格移动端新闻博客。">
   <meta name="theme-color" content="#000000">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #000000;
-      --surface: #0b0b0f;
-      --surface-2: #111116;
-      --surface-3: #17171d;
-      --glass: rgba(34, 34, 42, .58);
-      --glass-strong: rgba(28, 28, 36, .76);
-      --ink: #f5f5f7;
-      --muted: rgba(235, 235, 245, .68);
-      --muted-2: rgba(235, 235, 245, .48);
-      --line: rgba(255, 255, 255, .11);
-      --line-strong: rgba(255, 255, 255, .18);
+      --ios-background-primary: #000000;
+      --ios-background-secondary: #1c1c1e;
+      --ios-background-tertiary: #2c2c2e;
+      --ios-surface-elevated: #1c1c1e;
+      --ios-fill-quaternary: rgba(118, 118, 128, .18);
+      --ios-fill-tertiary: rgba(118, 118, 128, .24);
+      --ios-label-primary: #ffffff;
+      --ios-label-secondary: rgba(235, 235, 245, .60);
+      --ios-label-tertiary: rgba(235, 235, 245, .30);
+      --ios-hairline: rgba(255, 255, 255, .12);
+      --ios-toolbar-glass-fill: rgba(255, 255, 255, .07);
+      --ios-toolbar-glass-stroke: rgba(255, 255, 255, .30);
+      --ink: var(--ios-label-primary);
+      --muted: var(--ios-label-secondary);
+      --muted-2: var(--ios-label-tertiary);
       --blue: #0a84ff;
+      --red: #ff375f;
       --green: #32d74b;
       --orange: #ff9f0a;
-      --pink: #ff375f;
-      --shadow: rgba(0, 0, 0, .55);
-      --radius-xl: 26px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
+      --cover-panel-rgb: 24, 28, 44;
+      --cover-panel-soft-rgb: 43, 49, 70;
+      --hero-play: rgba(245, 246, 255, .82);
+      --radius-sheet: 34px;
+      --radius-group: 24px;
+      --radius-control: 999px;
+      --control-size: 44px;
+      --page-max: 390px;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --page-max: 430px;
     }
     * { box-sizing: border-box; }
     html {
+      background: var(--ios-background-primary);
       scroll-behavior: smooth;
-      background: var(--bg);
     }
     body {
+      min-width: 320px;
       margin: 0;
-      background: var(--bg);
+      background: var(--ios-background-primary);
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 17px;
-      line-height: 1.78;
+      font-size: 16px;
+      line-height: 1.55;
       letter-spacing: 0;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
-      min-width: 320px;
     }
-    a { color: #5eb1ff; }
-    ::selection {
-      background: rgba(10, 132, 255, .36);
-      color: #fff;
-    }
-    header {
-      position: relative;
-      overflow: clip;
-      border-bottom: 1px solid rgba(255, 255, 255, .06);
-      padding: calc(20px + env(safe-area-inset-top, 0px)) 14px 24px;
-      background: #000;
-    }
-    .wrap {
+    a { color: inherit; }
+    button { font: inherit; }
+    .page {
       width: min(var(--page-max), 100%);
       margin: 0 auto;
+      padding: calc(18px + env(safe-area-inset-top, 0px)) 20px calc(34px + var(--safe-bottom));
+      transform-origin: top center;
+      transition: transform .26s ease, filter .26s ease, opacity .26s ease, padding-bottom .24s ease;
     }
-    .pill {
-      display: inline-block;
-      border: 1px solid var(--line-strong);
-      border-radius: 999px;
-      background: var(--glass);
-      color: rgba(245, 245, 247, .78);
-      padding: 7px 13px;
-      font-size: 13px;
-      line-height: 1.25;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
-      -webkit-backdrop-filter: blur(24px) saturate(1.6);
-      backdrop-filter: blur(24px) saturate(1.6);
+    body.player-visible .page {
+      padding-bottom: calc(120px + var(--safe-bottom));
     }
-    h1 {
-      margin: 18px 0 12px;
-      font-size: 38px;
-      line-height: 1.02;
-      letter-spacing: 0;
-      font-weight: 760;
+    body.modal-open .page {
+      transform: scale(.97) translateY(-8px);
+      filter: blur(2px) saturate(.92);
+      opacity: .76;
     }
-    .lead {
-      margin: 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-    }
-    nav {
-      position: fixed;
-      top: auto;
-      bottom: calc(10px + var(--safe-bottom));
-      z-index: 10;
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      width: min(calc(100vw - 20px), var(--page-max));
-      left: 50%;
-      right: auto;
-      transform: translateX(-50%);
-      overflow-x: auto;
-      padding: 7px;
-      border: 1px solid var(--line-strong);
-      border-radius: 999px;
-      background: rgba(31, 31, 38, .62);
-      box-shadow: 0 18px 42px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .13);
-      -webkit-backdrop-filter: blur(28px) saturate(1.8);
-      backdrop-filter: blur(28px) saturate(1.8);
-      scrollbar-width: none;
-    }
-    nav::-webkit-scrollbar { display: none; }
-    nav a {
-      text-decoration: none;
-      color: rgba(245, 245, 247, .86);
-      background: rgba(255, 255, 255, .06);
-      border: 1px solid transparent;
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 14px;
-      line-height: 1.2;
-      white-space: nowrap;
-      flex: 0 0 auto;
-    }
-    nav a:focus-visible,
-    nav a:hover {
-      background: rgba(255, 255, 255, .14);
-      outline: none;
-    }
-    main {
-      width: min(var(--page-max), 100%);
-      margin: 0 auto;
-      padding: 14px 10px calc(106px + var(--safe-bottom));
-    }
-    article, .detail-block {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      padding: 18px;
-      box-shadow: 0 26px 80px rgba(0, 0, 0, .34);
-      margin-bottom: 18px;
-    }
-    h2 {
-      margin: 38px 0 14px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      font-size: 28px;
-      line-height: 1.25;
-      letter-spacing: 0;
-      font-weight: 740;
-    }
-    h2:first-child {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: 0;
-    }
-    h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      line-height: 1.35;
-      letter-spacing: 0;
-      font-weight: 700;
-    }
-    p { margin: 0 0 16px; }
-    .summary {
-      background: var(--surface-2);
-      border: 1px solid rgba(255, 159, 10, .28);
-      border-left: 4px solid var(--orange);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      margin: 18px 0 6px;
-    }
-    .audio-card {
-      position: relative;
-      background: var(--glass-strong);
-      border: 1px solid var(--line-strong);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      margin: 4px 0 22px;
-      box-shadow: 0 18px 46px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .14);
-      -webkit-backdrop-filter: blur(28px) saturate(1.7);
-      backdrop-filter: blur(28px) saturate(1.7);
-    }
-    .audio-card h3 {
-      margin-bottom: 6px;
-    }
-    .audio-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
-      margin-bottom: 12px;
-    }
-    .voice-single {
+    .app-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      min-height: 54px;
-      margin: 12px 0 14px;
-      padding: 10px 12px 10px 14px;
-      border: 1px solid rgba(255, 255, 255, .14);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .08);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+      margin-bottom: 14px;
     }
-    .voice-title {
-      display: block;
-      color: var(--ink);
-      font-size: 15px;
-      font-weight: 720;
-      line-height: 1.25;
+    .brand {
+      min-width: 0;
     }
-    .voice-subtitle {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted-2);
-      font-size: 13px;
-      line-height: 1.25;
-    }
-    .voice-badge {
-      flex: 0 0 auto;
-      border-radius: 999px;
-      background: var(--blue);
-      color: #fff;
-      padding: 7px 10px;
-      font-size: 13px;
+    .brand-mark {
+      font-size: 22px;
       font-weight: 700;
-      box-shadow: 0 10px 28px rgba(10, 132, 255, .32);
+      letter-spacing: 0;
+      line-height: 1.1;
     }
-    .audio-card audio {
-      width: 100%;
-      display: block;
-      min-height: 44px;
-      border-radius: 18px;
-      overflow: hidden;
-    }
-    .audio-card audio::-webkit-media-controls-panel {
-      background-color: rgba(245, 245, 247, .9);
-    }
-    .item {
-      border-top: 1px solid var(--line);
-      padding: 14px 0;
-    }
-    .item:first-of-type { border-top: 0; }
-    .id {
-      color: var(--orange);
-      font-weight: 800;
-    }
-    .meta {
+    .brand-sub {
+      margin-top: 6px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
+      line-height: 1.2;
     }
-    .details {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 14px;
+    .cover-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-group);
+      background: var(--ios-fill-quaternary);
+      border: .5px solid var(--ios-hairline);
+      box-shadow: none;
+      -webkit-backdrop-filter: blur(22px) saturate(1.16);
+      backdrop-filter: blur(22px) saturate(1.16);
     }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      background: var(--surface-2);
-      padding: 16px;
+    .cover-card::before,
+    .news-card::before,
+    .modal-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 18%);
+      opacity: .28;
     }
-    .news-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 16px;
+    .cover-media {
+      position: relative;
+      z-index: 1;
+      height: 244px;
+      overflow: hidden;
+      background: var(--ios-background-secondary);
     }
-    .news-card {
+    .cover-media img {
       width: 100%;
-      min-height: 132px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      background: var(--surface-2);
-      padding: 16px;
-      text-align: left;
-      color: var(--ink);
-      font: inherit;
-      cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
-      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
-    .news-card:hover,
-    .news-card:focus-visible {
-      border-color: rgba(10, 132, 255, .58);
-      transform: translateY(-3px);
-      background: var(--surface-3);
-      box-shadow: 0 18px 42px rgba(0, 0, 0, .42), 0 0 0 1px rgba(10, 132, 255, .14);
+    .cover-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 52%, rgba(0,0,0,.28));
+      pointer-events: none;
+    }
+    .cover-info {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--control-size);
+      gap: 14px;
+      align-items: center;
+      min-height: 112px;
+      padding: 16px 18px;
+      background:
+        linear-gradient(180deg, rgba(var(--cover-panel-soft-rgb), .88), rgba(var(--cover-panel-rgb), .96)),
+        rgba(255,255,255,.06);
+      border-top: .5px solid rgba(255,255,255,.10);
+      -webkit-backdrop-filter: blur(20px) saturate(1.18);
+      backdrop-filter: blur(20px) saturate(1.18);
+    }
+    .cover-title {
+      margin: 0;
+      color: #fff;
+      font-size: 19px;
+      line-height: 1.16;
+      font-weight: 700;
+    }
+    .cover-time {
+      margin: 6px 0 0;
+      color: rgba(235, 235, 245, .66);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+    .play-button {
+      width: var(--control-size);
+      height: var(--control-size);
+      border: .75px solid rgba(255,255,255,.32);
+      border-radius: 50%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(235,235,245,.72)),
+        rgba(255,255,255,.58);
+      color: rgb(var(--cover-panel-rgb));
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: none;
+      -webkit-backdrop-filter: blur(22px) saturate(1.25);
+      backdrop-filter: blur(22px) saturate(1.25);
+    }
+    .play-button::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-left: 3px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 12px solid currentColor;
+    }
+    .play-button.playing::before {
+      width: 15px;
+      height: 16px;
+      margin-left: 0;
+      border: 0;
+      background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65% 100%);
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 28px 0 12px;
+    }
+    .section-title h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.12;
+      letter-spacing: 0;
+      font-weight: 700;
+    }
+    .category-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: -2px 0 14px;
+      padding: 0 1px 2px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .category-bar::-webkit-scrollbar { display: none; }
+    .category-bar span {
+      flex: 0 0 auto;
+      color: rgba(245,245,247,.82);
+      background: var(--ios-toolbar-glass-fill);
+      border: .75px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1;
+      white-space: nowrap;
+      -webkit-backdrop-filter: blur(18px) saturate(1.22);
+      backdrop-filter: blur(18px) saturate(1.22);
+    }
+    .hidden-audio {
+      display: none;
+    }
+    .mini-player {
+      position: fixed;
+      left: 50%;
+      bottom: calc(12px + var(--safe-bottom));
+      z-index: 18;
+      width: min(calc(var(--page-max) - 28px), calc(100vw - 28px));
+      min-height: 72px;
+      overflow: hidden;
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06)),
+        rgba(34,34,38,.64);
+      border: .5px solid rgba(255,255,255,.16);
+      color: var(--ios-label-primary);
+      box-shadow: 0 18px 46px rgba(0,0,0,.34);
+      -webkit-backdrop-filter: blur(28px) saturate(1.28);
+      backdrop-filter: blur(28px) saturate(1.28);
+      transform: translate(-50%, 18px) scale(.98);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+    body.player-visible .mini-player {
+      transform: translate(-50%, 0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.modal-open .mini-player {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 18px) scale(.98);
+    }
+    .mini-player-main {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) 44px;
+      align-items: center;
+      gap: 12px;
+      min-height: 68px;
+      padding: 10px 12px 14px;
+    }
+    .mini-art {
+      width: 48px;
+      height: 48px;
+      overflow: hidden;
+      border-radius: 13px;
+      background: rgba(255,255,255,.10);
+      border: .5px solid rgba(255,255,255,.12);
+    }
+    .mini-art img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .mini-copy {
+      min-width: 0;
+    }
+    .mini-title {
+      display: block;
+      overflow: hidden;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.18;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mini-meta {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: rgba(235,235,245,.62);
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 560;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mini-toggle {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #050505;
+      background: rgba(255,255,255,.92);
+      cursor: pointer;
+      box-shadow: none;
+    }
+    .mini-toggle:focus {
       outline: none;
     }
-    .news-card .tag {
-      margin-bottom: 8px;
+    .mini-toggle:focus-visible {
+      box-shadow: 0 0 0 2px rgba(255,255,255,.22);
+    }
+    .mini-toggle::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-left: 3px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 12px solid currentColor;
+    }
+    .mini-toggle.playing::before {
+      width: 14px;
+      height: 16px;
+      margin-left: 0;
+      border: 0;
+      background: linear-gradient(90deg, currentColor 0 36%, transparent 36% 64%, currentColor 64% 100%);
+    }
+    .mini-progress {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 8px;
+      height: 3px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(235,235,245,.22);
+    }
+    .mini-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(255,255,255,.82);
+      transition: width .16s linear;
+    }
+    .news-list {
+      display: grid;
+      gap: 12px;
+    }
+    .news-card {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-height: 96px;
+      padding: 15px 16px;
+      overflow: hidden;
+      text-align: left;
+      color: var(--ink);
+      background: var(--ios-fill-quaternary);
+      border: .5px solid var(--ios-hairline);
+      border-radius: var(--radius-group);
+      cursor: pointer;
+      box-shadow: none;
+      -webkit-backdrop-filter: blur(22px) saturate(1.14);
+      backdrop-filter: blur(22px) saturate(1.14);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .news-card:active {
+      transform: scale(.97);
+      background: var(--ios-fill-tertiary);
+    }
+    .news-main {
+      position: relative;
+      z-index: 1;
+      display: block;
+      padding: 0;
+    }
+    .news-card.has-image .news-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 104px;
+      gap: 12px;
+      align-items: center;
+      min-height: 88px;
+    }
+    .news-text {
+      min-width: 0;
+    }
+    .news-thumb {
+      width: 104px;
+      height: 88px;
+      display: block;
+      justify-self: end;
+      object-fit: cover;
+      border-radius: 18px;
+      background: var(--ios-fill-quaternary);
     }
     .news-card h3 {
-      margin-bottom: 8px;
-    }
-    .news-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
       margin: 0;
+      color: #fff;
+      font-size: 17px;
+      line-height: 1.24;
+      font-weight: 700;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+    .source-note {
+      display: block;
+      margin: 8px 0 0;
+      color: var(--ios-label-secondary);
+      font-size: 12px;
+      font-weight: 560;
+      line-height: 1.35;
     }
     .modal-backdrop {
       position: fixed;
@@ -313,372 +443,463 @@
       display: none;
       align-items: flex-end;
       justify-content: center;
-      padding: 10px 10px 0;
-      background: rgba(0, 0, 0, .72);
-      -webkit-backdrop-filter: blur(18px);
-      backdrop-filter: blur(18px);
+      padding: 0;
+      background: rgba(0,0,0,.38);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+      backdrop-filter: blur(18px) saturate(1.08);
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-panel {
+      position: relative;
       width: min(var(--page-max), 100%);
-      max-height: 88vh;
+      height: calc(100dvh - 70px);
+      max-height: calc(100dvh - 70px);
       overflow: auto;
-      border-radius: 30px 30px 0 0;
-      background: rgba(20, 20, 26, .9);
-      border: 1px solid var(--line-strong);
-      box-shadow: 0 34px 100px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 255, 255, .12);
-      -webkit-backdrop-filter: blur(28px) saturate(1.7);
-      backdrop-filter: blur(28px) saturate(1.7);
+      border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+      background: rgba(21, 21, 23, .84);
+      border: .5px solid var(--ios-hairline);
+      border-bottom: 0;
+      box-shadow: 0 -16px 44px rgba(0,0,0,.24);
+      -webkit-backdrop-filter: blur(28px) saturate(1.22);
+      backdrop-filter: blur(28px) saturate(1.22);
+    }
+    .modal-panel::after {
+      content: none;
     }
     .modal-head {
       position: sticky;
       top: 0;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 18px 18px 12px;
-      background: rgba(20, 20, 26, .78);
-      border-bottom: 1px solid var(--line);
-      -webkit-backdrop-filter: blur(20px) saturate(1.6);
-      backdrop-filter: blur(20px) saturate(1.6);
+      z-index: 3;
+      min-height: 70px;
+      padding: 26px 72px 16px 20px;
+      border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+      background: rgba(21, 21, 23, .72);
+      -webkit-backdrop-filter: blur(24px) saturate(1.16);
+      backdrop-filter: blur(24px) saturate(1.16);
     }
-    .modal-title {
-      margin: 0;
-      font-size: 22px;
-      line-height: 1.25;
+    .modal-grabber {
+      position: absolute;
+      left: 50%;
+      top: 9px;
+      width: 52px;
+      height: 5px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(235,235,245,.30);
+    }
+    .modal-hero {
+      position: relative;
+      z-index: 1;
+      margin: 8px 20px 0;
+      height: 196px;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--ios-background-secondary);
+    }
+    .modal-hero.no-image {
+      display: none;
+    }
+    .modal-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .modal-hero.no-image img {
+      display: none;
     }
     .modal-close {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--line);
+      position: absolute;
+      right: 18px;
+      top: 25px;
+      width: var(--control-size);
+      height: var(--control-size);
+      border: .75px solid var(--ios-toolbar-glass-stroke);
       border-radius: 50%;
-      background: rgba(255, 255, 255, .08);
-      color: var(--ink);
-      font-size: 22px;
+      background: var(--ios-toolbar-glass-fill);
+      color: #fff;
+      font-size: 28px;
       line-height: 1;
       cursor: pointer;
-      transition: background-color .18s ease, transform .18s ease;
+      box-shadow: none;
+      -webkit-backdrop-filter: blur(24px) saturate(1.25);
+      backdrop-filter: blur(24px) saturate(1.25);
     }
-    .modal-close:hover,
-    .modal-close:focus-visible {
-      background: rgba(255, 255, 255, .16);
-      transform: scale(1.04);
+    .modal-close:focus {
       outline: none;
     }
+    .modal-close:focus-visible {
+      box-shadow: 0 0 0 2px rgba(255,255,255,.22);
+    }
     .modal-body {
-      padding: 18px;
+      position: relative;
+      z-index: 1;
+      padding: 22px 20px 34px;
     }
     .modal-meta {
       display: inline-block;
-      margin-bottom: 12px;
-      color: #9ae7a7;
-      background: rgba(50, 215, 75, .13);
-      border-radius: 999px;
-      border: 1px solid rgba(50, 215, 75, .18);
-      padding: 5px 10px;
+      margin-bottom: 8px;
+      color: var(--ios-label-secondary);
+      background: transparent;
+      border-radius: 0;
+      border: 0;
+      padding: 0;
       font-size: 13px;
+      font-weight: 600;
     }
-    .modal-body h4 {
-      margin: 18px 0 8px;
-      font-size: 17px;
-      letter-spacing: 0;
+    .modal-title {
+      margin: 0;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1.18;
+      font-weight: 700;
     }
-    .modal-body p {
-      color: var(--muted);
-      margin-bottom: 12px;
+    .modal-detail {
+      display: grid;
+      gap: 14px;
+    }
+    .modal-detail p {
+      margin: 0;
+      color: rgba(245,245,247,.88);
+      font-size: 15px;
+      line-height: 1.62;
+      font-weight: 430;
     }
     .modal-link {
-      display: inline-block;
-      margin-top: 8px;
-      color: #fff;
-      background: var(--blue);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      margin: 24px auto 0;
+      min-width: 118px;
+      color: #050505;
+      background: rgba(255,255,255,.92);
+      border: 0;
       border-radius: 999px;
-      padding: 9px 14px;
+      padding: 0 20px;
       text-decoration: none;
       font-weight: 700;
       font-size: 14px;
-      box-shadow: 0 12px 26px rgba(10, 132, 255, .28);
-    }
-    .tag {
-      display: inline-block;
-      background: rgba(10, 132, 255, .13);
-      color: #8bc7ff;
-      border: 1px solid rgba(10, 132, 255, .18);
-      border-radius: 999px;
-      padding: 4px 9px;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-    .actions {
-      background: var(--surface-2);
-      border: 1px solid rgba(50, 215, 75, .18);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-    }
-    .sources {
-      color: var(--muted);
-      font-size: 15px;
+      text-align: center;
+      box-shadow: none;
+      -webkit-backdrop-filter: blur(22px) saturate(1.24);
+      backdrop-filter: blur(22px) saturate(1.24);
     }
     footer {
-      color: var(--muted);
+      color: var(--muted-2);
       text-align: center;
-      font-size: 13px;
-      padding: 4px 18px calc(36px + var(--safe-bottom));
+      font-size: 12px;
+      padding: 26px 12px 0;
     }
     @media (min-width: 520px) {
-      body::before {
-        content: "移动端预览";
-        position: fixed;
-        top: 18px;
+      body {
+        width: var(--page-max);
+        min-width: var(--page-max);
+        margin: 0 auto;
+        overflow-x: hidden;
+      }
+      .page { width: 100%; }
+      .modal-backdrop {
+        width: var(--page-max);
         left: 50%;
-        z-index: 0;
-        transform: translateX(calc(-1 * (var(--page-max) / 2 + 108px)));
-        color: rgba(235, 235, 245, .42);
-        font-size: 13px;
-        letter-spacing: 0;
+        right: auto;
+        transform: translateX(-50%);
       }
-      header,
-      main,
-      footer {
-        position: relative;
-        z-index: 1;
-      }
+      .modal-panel { width: 100%; }
     }
-    @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-      .pill, nav, .audio-card, .modal-panel, .modal-head {
-        background: rgba(28, 28, 36, .96);
+    @media (max-width: 374px) {
+      .brand-mark { font-size: 21px; }
+      .page { padding-left: 16px; padding-right: 16px; }
+      .cover-media { height: 224px; }
+      .cover-info { grid-template-columns: 1fr 40px; }
+      .play-button { width: 40px; height: 40px; }
+      .news-card h3 { font-size: 16.5px; }
+      .news-card.has-image .news-main {
+        grid-template-columns: minmax(0, 1fr) 96px;
+        gap: 11px;
+        min-height: 84px;
       }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        transition-duration: .01ms !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
+      .news-thumb {
+        width: 96px;
+        height: 84px;
+        border-radius: 15px;
       }
-    }
-    @media (prefers-reduced-transparency: reduce) {
-      .pill, nav, .audio-card, .modal-panel, .modal-head {
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        background: #1c1c22;
+      .mini-player {
+        width: calc(100vw - 20px);
+        border-radius: 22px;
       }
-    }
-    @media (max-width: 560px) {
-      body { font-size: 16px; }
-      header {
-        padding: calc(20px + env(safe-area-inset-top, 0px)) 14px 24px;
+      .mini-player-main {
+        grid-template-columns: 44px minmax(0, 1fr) 42px;
+        gap: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
       }
-      h1 {
-        margin-top: 16px;
-        font-size: 38px;
+      .mini-art,
+      .mini-toggle {
+        width: 42px;
+        height: 42px;
       }
-      article, .detail-block {
-        padding: 18px;
-      }
-      h2 { font-size: 23px; }
-      .lead { font-size: 16px; }
-      main {
-        padding: 14px 10px calc(106px + var(--safe-bottom));
-      }
-      .voice-single {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-    @media (max-width: 380px) {
-      .voice-badge { width: 100%; text-align: center; }
+      .modal-title { font-size: 21px; }
+      .modal-detail p { font-size: 14.5px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <span class="pill">2026-06-20 · 周六 · 早上 8:00 版</span>
-      <h1>Rainford 的早报</h1>
-      <p class="lead">手机微信专用：打开先看正文和语音，往下滑看新闻模块、行动清单和来源。</p>
-      <nav>
-        <a href="#audio">语音朗读</a>
-        <a href="#blog">博客正文</a>
-        <a href="#details">新闻模块</a>
-        <a href="#actions">行动清单</a>
-        <a href="#sources">来源</a>
-      </nav>
-    </div>
-  </header>
+  <main class="page">
+    <header class="app-head">
+      <div class="brand">
+        <div class="brand-mark">Rainford Daily</div>
+        <div class="brand-sub">2026-06-20 · 周六 · 早上 8:00</div>
+      </div>
+    </header>
 
-  <main>
-    <article id="blog">
-      <h2>博客正文</h2>
-      <section class="audio-card" id="audio" aria-label="语音朗读">
-        <h3>今日语音</h3>
-        <p>默认播放当前清晰口播版。每天只保留这一条声音，让早报像一个固定栏目，而不是工具面板。</p>
-        <div class="voice-single" aria-label="默认语音版本">
-          <span>
-            <span class="voice-title">雨枫早报 · 正常清晰版</span>
-            <span class="voice-subtitle">固定默认声音 · 语速接近真人早报 · 2:11</span>
-          </span>
-          <span class="voice-badge">今日默认</span>
+    <section class="cover-card" id="top" aria-label="博客主卡">
+      <div class="cover-media">
+        <img id="coverImage" src="assets/news-source-G1-2026-06-20.jpg" alt="AP G7 原文配图">
+      </div>
+      <div class="cover-info">
+        <div>
+          <h1 class="cover-title">Rainford 早间完整播报</h1>
+          <p class="cover-time">06-20 · 11:35</p>
         </div>
-        <audio id="briefAudio" controls preload="metadata" src="assets/rainford-brief-2026-06-20-chattts-clear.mp3">
-          你的浏览器暂时不支持音频播放。
-        </audio>
-      </section>
-      <p>今天的早报主线很清楚：AI 不再只是模型能力竞赛，它正在进入现实世界的入口、监管、身份、权限和商业落地。全球大事方面，中东能源通道、俄乌能源基础设施、英国平台监管和美国 AI 投资周期，都会影响科技公司的资金、政策和产品节奏。对你最直接的部分，是微信 AI、小程序接入、AI+消费政策和 WAIC 上海。</p>
-
-      <div class="summary">
-        <p><strong>今天一句话：</strong>AI 的竞争重点正在从“谁的模型更强”，转向“谁能进入入口、拿到场景、解决权限、被监管接受、真正帮人完成任务”。</p>
+        <button class="play-button" id="playButton" type="button" aria-label="播放完整早间播报"></button>
       </div>
+    </section>
+    <audio class="hidden-audio" id="briefAudio" preload="metadata" src="assets/rainford-brief-2026-06-20-morning-broadcast.mp3"></audio>
 
-      <h2>一、全球大事</h2>
-      <p>全球部分的重点不是单条国际新闻，而是能源、平台监管和 AI 投资周期正在一起影响科技市场。</p>
-      <div class="item"><p><span class="id">G1｜</span>G7 支持美伊阶段性协议。AP 报道，G7 领导人支持美国与伊朗的阶段性安排，焦点包括霍尔木兹海峡、能源通道和后续核协议。对市场来说，这不是单纯外交新闻，而是能源价格和全球风险偏好的变量。</p></div>
-      <div class="item"><p><span class="id">G2｜</span>莫斯科炼油厂再遭无人机袭击。Guardian 报道，乌克兰无人机袭击莫斯科炼油厂，并影响机场和城市运行。俄乌冲突正在更多打向能源、交通、城市基础设施，这会继续影响欧洲能源和地缘政治风险。</p></div>
-      <div class="item"><p><span class="id">G3｜</span>英国拟禁止 16 岁以下使用多个社交媒体应用。AP 报道，英国政府计划限制未成年人使用 TikTok、YouTube、Snapchat 等平台。这个信号对内容产品很重要：未来青少年产品、推荐算法、年龄验证、隐私合规会越来越重。</p></div>
-      <div class="item"><p><span class="id">G4｜</span>英国可能要求 YouTube、Meta、TikTok 提高公共新闻露出。FT 报道，英国政府准备让平台提高 BBC、ITV、Channel 4 等公共新闻内容的可见度。这说明内容分发权不再完全由平台算法决定，监管会介入“谁被看见”。</p></div>
-      <div class="item"><p><span class="id">G5｜</span>美联储开始面对 AI 投资热潮的新难题。WSJ 报道，美联储需要判断 AI 投资到底是长期生产率提升，还是短期需求过热。这个问题会影响利率、科技股估值和 AI 基建投资节奏。</p></div>
-
-      <h2>二、AI 主线</h2>
-      <p>今天 AI 最大的变化不是“又一个模型更强了”，而是前沿模型进入国家安全、出口控制、企业权限和真实业务流程。</p>
-      <div class="item"><p><span class="id">A1｜</span>Anthropic 被放进国家安全讨论。Axios 报道，特朗普称曾将 Anthropic 视为国家安全威胁。无论立场如何，这说明顶级模型公司已经不只是创业公司，而是政策和安全体系的一部分。</p></div>
-      <div class="item"><p><span class="id">A2｜</span>Claude Fable/Mythos 访问暂停。Anthropic 官方和 AP 报道显示，相关模型因出口控制和访问限制暂停。强模型越强，越容易遇到跨境使用、员工权限、客户访问和合规边界问题。</p></div>
-      <div class="item"><p><span class="id">A3｜</span>DeepMind 发布 AI Control Roadmap。Axios 报道，DeepMind 把更自主的 AI Agent 当成类似网络安全的风险对象来管理，强调监控、隔离、权限和防御。这条和你正在做的微信 AI 助手很相关：AI 能做事以后，就必须有边界。</p></div>
-      <div class="item"><p><span class="id">A4｜</span>AlphaFold 核心 John Jumper 转投 Anthropic。Business Insider 报道，AlphaFold 关键人物离开 DeepMind 加入 Anthropic。科学 AI、模型能力和安全研究正在向少数前沿模型公司集中。</p></div>
-      <div class="item"><p><span class="id">A5｜</span>OpenAI 更新健康智能与生命科学评测。OpenAI 近期发布了健康智能、LifeSciBench、模型发布前行为模拟等内容。看点不是单个功能，而是 OpenAI 正在把模型能力推进到高责任领域，并补上评测和上线前预演。</p></div>
-      <div class="item"><p><span class="id">A6｜</span>AI Agent 身份成为新赛道。TechCrunch 报道，NewCore 获 6600 万美元融资，做 AI Agent 的身份、认证和权限管理。企业不会只问“模型聪不聪明”，而会问“这个智能体是谁、能看什么、能改什么、出了事谁负责”。</p></div>
-
-      <h2>三、中国、微信与上海</h2>
-      <p>中国这边的主线更贴近你的实际操作：AI+消费政策开始明确场景，微信 AI 开始打开入口，上海 WAIC 即将把人、项目、企业聚在一起。</p>
-      <div class="item"><p><span class="id">C1｜</span>八部门发布 AI+消费实施意见。新华网披露，政策点名新一代 AI 手机、智能电脑、智能电视、智能家居、AI 眼镜、机器人、车载终端等方向。对你来说，这不是宏观文件，而是 AI 咨询和产品选题的方向库。</p></div>
-      <div class="item"><p><span class="id">C2｜</span>微信开放 AI 生态接入能力。界面、智东西等报道显示，开发者可在小程序后台申请接入微信 AI，模式包括自动模式和开发模式。重点是入口变化：以前用户找小程序，以后可能是微信 AI 调小程序。</p></div>
-      <div class="item"><p><span class="id">C3｜</span>微信 AI 成长计划给开发者资源。i黑马报道提到云开发、混元 Token、文生图额度、数据能力和流量激励。工具型、内容型、小程序型 AI 产品，值得重新评估微信生态。</p></div>
-      <div class="item"><p><span class="id">C4｜</span>WAIC 2026 将于 7 月 17-20 日在上海举行。人民网和新浪科技报道，本届 WAIC 会有论坛、展览、评奖、应用体验、创新孵化和招才引智。对你来说，这是找岗位、项目、合作、客户的集中窗口。</p></div>
-
-      <h2>四、产品、设计与商业机会</h2>
-      <div class="item"><p><span class="id">P1｜</span>Product Hunt 今日产品里，ReleaseDock 把 AI 客服、帮助中心、更新日志放进一个收件箱。这类产品说明 B2B 工具正在从“单点 AI 功能”变成“工作台”。</p></div>
-      <div class="item"><p><span class="id">P2｜</span>Are you in the Weights? 把“我是否在模型训练数据里”做成轻量传播产品。这类产品不一定大，但能说明一个方向：复杂 AI 议题如果能变成一句话体验，就有传播力。</p></div>
-      <div class="item"><p><span class="id">P3｜</span>Product Hunt AI Agents 榜单里，Fin、Vapi、Make 仍是标杆。它们分别对应客服、语音和自动化流程，说明 Agent 最先商业化的地方不是闲聊，而是具体业务。</p></div>
-      <div class="item"><p><span class="id">P4｜</span>GEO 和 AI 搜索推荐开始成为品牌服务。极客公园提到，企业正在从“被搜索引擎搜到”转向“被 AI 智能体选中”。这对内容、品牌、咨询服务都有机会。</p></div>
-    </article>
-
-    <section class="detail-block" id="details">
-      <h2>新闻模块</h2>
-      <p class="meta">下面每个模块都可以点击。点开后会弹出完整解释、对你的意义和原文入口。</p>
-      <div class="news-grid" id="newsGrid">
-        <button class="news-card" type="button" data-news-id="G1">
-          <span class="tag">G1｜全球大事</span>
-          <h3>G7 支持美伊阶段性协议</h3>
-          <p>能源通道和中东风险仍会影响科技市场情绪。</p>
-        </button>
-        <button class="news-card" type="button" data-news-id="G3">
-          <span class="tag">G3｜平台监管</span>
-          <h3>英国拟限制未成年人社交媒体</h3>
-          <p>青少年产品的年龄验证和内容推荐会更严格。</p>
-        </button>
-        <button class="news-card" type="button" data-news-id="A1">
-          <span class="tag">A1｜前沿模型</span>
-          <h3>Anthropic 进入国家安全讨论</h3>
-          <p>顶级模型公司正在变成政策和安全体系的一部分。</p>
-        </button>
+    <section id="news" aria-label="新闻列表">
+      <div class="section-title">
+        <h2>今日新闻</h2>
+      </div>
+      <div class="category-bar" aria-label="信息分类">
+        <span>AI / 科技 3</span>
+        <span>中国 / 微信 / 上海 3</span>
+        <span>全球大事 2</span>
+        <span>产品 / 机会 2</span>
+      </div>
+      <div class="news-list">
         <button class="news-card" type="button" data-news-id="A3">
-          <span class="tag">A3｜AI 安全</span>
-          <h3>DeepMind AI Control Roadmap</h3>
-          <p>智能体越能做事，越需要权限、监控和隔离。</p>
+          <div class="news-main">
+            <div class="news-text">
+              <h3>DeepMind AI Control Roadmap</h3>
+              <p class="source-note">来源：Axios｜Google DeepMind</p>
+            </div>
+          </div>
         </button>
-        <button class="news-card" type="button" data-news-id="A6">
-          <span class="tag">A6｜Agent 基建</span>
-          <h3>NewCore 做 AI Agent 身份</h3>
-          <p>企业智能体落地前，先要解决账号和审计。</p>
-        </button>
-        <button class="news-card" type="button" data-news-id="C1">
-          <span class="tag">C1｜AI+消费</span>
-          <h3>八部门发布 AI+消费实施意见</h3>
-          <p>AI 手机、家电、机器人、眼镜被政策点名。</p>
-        </button>
+
         <button class="news-card" type="button" data-news-id="C2">
-          <span class="tag">C2｜微信入口</span>
-          <h3>微信开放 AI 生态接入</h3>
-          <p>未来可能是微信 AI 帮用户调用小程序。</p>
+          <div class="news-main">
+            <div class="news-text">
+              <h3>微信开放 AI 生态接入</h3>
+              <p class="source-note">来源：界面｜东方财富｜智东西｜i黑马</p>
+            </div>
+          </div>
         </button>
+
+        <button class="news-card" type="button" data-news-id="C1">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>八部门发布 AI+消费实施意见</h3>
+              <p class="source-note">来源：新华网</p>
+            </div>
+          </div>
+        </button>
+
         <button class="news-card" type="button" data-news-id="C4">
-          <span class="tag">C4｜上海机会</span>
-          <h3>WAIC 2026 上海</h3>
-          <p>7 月是找项目、岗位和合作的线下窗口。</p>
+          <div class="news-main">
+            <div class="news-text">
+              <h3>WAIC 2026 将在上海举行</h3>
+              <p class="source-note">来源：人民网｜新浪科技｜中新社</p>
+            </div>
+          </div>
         </button>
+
+        <button class="news-card has-image" type="button" data-news-id="A6">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>NewCore 做 AI Agent 身份</h3>
+              <p class="source-note">来源：TechCrunch</p>
+            </div>
+            <img class="news-thumb" src="assets/news-source-A6-2026-06-20.webp" alt="">
+          </div>
+        </button>
+
+        <button class="news-card has-image" type="button" data-news-id="G3">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>英国拟限制未成年人社交媒体</h3>
+              <p class="source-note">来源：AP</p>
+            </div>
+            <img class="news-thumb" src="assets/news-source-G3-2026-06-20.jpg" alt="">
+          </div>
+        </button>
+
+        <button class="news-card" type="button" data-news-id="A1">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>Anthropic 进入国家安全讨论</h3>
+              <p class="source-note">来源：Axios</p>
+            </div>
+          </div>
+        </button>
+
+        <button class="news-card has-image" type="button" data-news-id="G1">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>G7 支持美伊阶段性协议</h3>
+              <p class="source-note">来源：AP</p>
+            </div>
+            <img class="news-thumb" src="assets/news-source-G1-2026-06-20.jpg" alt="">
+          </div>
+        </button>
+
         <button class="news-card" type="button" data-news-id="P1">
-          <span class="tag">P1｜产品工具</span>
-          <h3>ReleaseDock 工作台化</h3>
-          <p>AI 客服、帮助中心和更新日志开始合并。</p>
+          <div class="news-main">
+            <div class="news-text">
+              <h3>ReleaseDock 工作台化</h3>
+              <p class="source-note">来源：Product Hunt</p>
+            </div>
+          </div>
         </button>
-        <button class="news-card" type="button" data-news-id="P4">
-          <span class="tag">P4｜商业机会</span>
-          <h3>GEO / AI 搜索推荐</h3>
-          <p>品牌要从“被搜到”转向“被 AI 选中”。</p>
+
+        <button class="news-card has-image" type="button" data-news-id="P4">
+          <div class="news-main">
+            <div class="news-text">
+              <h3>GEO / AI 搜索推荐</h3>
+              <p class="source-note">来源：极客公园</p>
+            </div>
+            <img class="news-thumb" src="assets/news-source-P4-2026-06-20.png" alt="">
+          </div>
         </button>
       </div>
     </section>
 
-    <section class="detail-block" id="actions">
-      <h2>给 Rainford 的行动清单</h2>
-      <div class="actions">
-        <p><span class="id">R1｜</span>把微信 AI 助手拆成个人版、亲密关系版、群组版。每个版本的记忆、权限、人格、工具都要单独配置。</p>
-        <p><span class="id">R2｜</span>早报后续保留编号索引。你看到 A3、C2、P4，直接问编号，我再展开来源、背景、机会和操作。</p>
-        <p><span class="id">R3｜</span>为 WAIC 做准备清单：30 家展商、10 个目标岗位、10 个合作方向、5 个主动私信对象。</p>
-        <p><span class="id">R4｜</span>把 AI+消费政策转成咨询产品：门店智能客服、活动海报、短视频脚本、微信私域自动化。</p>
-        <p><span class="id">R5｜</span>图片生成单独做高质量流程，不靠默认低质量出图。</p>
-      </div>
-    </section>
-
-    <section class="detail-block" id="sources">
-      <h2>来源索引</h2>
-      <p class="sources">AP｜G7/美伊协议、英国未成年人社交媒体限制、Nvidia 黄仁勋、AI 数据中心环境影响<br>
-      Axios｜Anthropic 国家安全争议、DeepMind AI Control Roadmap<br>
-      OpenAI｜健康智能、LifeSciBench、模型发布前行为模拟<br>
-      Anthropic｜Claude Fable/Mythos 访问暂停<br>
-      新华网｜AI+消费实施意见及解读<br>
-      界面/东方财富、智东西、i黑马｜微信 AI 小程序接入<br>
-      人民网、新浪科技、中新社、极客公园｜WAIC 2026 上海信息<br>
-      TechCrunch｜NewCore Agent 身份管理融资<br>
-      Product Hunt｜今日产品和 AI Agents 榜单</p>
-    </section>
+    <footer>Rainford 的早报 · 本地预览版 · Zahallo iOS 26 移动端</footer>
   </main>
 
-  <footer>Rainford 的早报 · 手机微信专用 · 微信以后只发这个页面链接</footer>
+  <aside class="mini-player" id="miniPlayer" aria-hidden="true" aria-label="早报播放控制">
+    <div class="mini-player-main">
+      <div class="mini-art" aria-hidden="true">
+        <img src="assets/news-source-G1-2026-06-20.jpg" alt="">
+      </div>
+      <div class="mini-copy">
+        <strong class="mini-title">Rainford 早间完整播报</strong>
+        <span class="mini-meta" id="miniMeta">准备播放</span>
+      </div>
+      <button class="mini-toggle" id="miniToggle" type="button" aria-label="播放或暂停早报"></button>
+    </div>
+    <div class="mini-progress" aria-hidden="true">
+      <div class="mini-progress-fill" id="miniProgress"></div>
+    </div>
+  </aside>
+
   <div class="modal-backdrop" id="newsModal" aria-hidden="true">
     <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-head">
+        <div class="modal-grabber" aria-hidden="true"></div>
+        <span class="modal-meta" id="modalMeta"></span>
         <h3 class="modal-title" id="modalTitle"></h3>
         <button class="modal-close" type="button" id="modalClose" aria-label="关闭">×</button>
       </div>
+      <div class="modal-hero">
+        <img id="modalImage" alt="">
+      </div>
       <div class="modal-body">
-        <span class="modal-meta" id="modalMeta"></span>
-        <h4>发生了什么</h4>
-        <p id="modalWhat"></p>
-        <h4>为什么值得看</h4>
-        <p id="modalWhy"></p>
-        <h4>对 Rainford 的意义</h4>
-        <p id="modalUse"></p>
+        <div class="modal-detail" id="modalDetail"></div>
         <a class="modal-link" id="modalLink" target="_blank" rel="noopener noreferrer" href="#">阅读原文</a>
       </div>
     </div>
   </div>
+
   <script>
     const newsData = {
-      G1: {
-        title: "G7 支持美伊阶段性协议",
-        meta: "AP · 06-17 · 全球大事",
-        what: "G7 领导人支持美国与伊朗的阶段性安排，焦点包括霍尔木兹海峡、能源通道和后续核协议。",
-        why: "这会影响能源价格、风险偏好和科技市场估值。AI 基建、电力和数据中心也会受能源价格影响。",
-        use: "这类全球变量不用每天深挖，但早报需要保留，因为它会影响市场情绪和大厂投资节奏。",
-        url: "https://apnews.com/article/2b13227bfc63d5c7c92c64488e3e2753"
+      A3: {
+        title: "DeepMind AI Control Roadmap",
+        meta: "Axios · 06-18 · AI 安全",
+        summary: "DeepMind 开始把更自主的 AI Agent 当成需要系统治理的产品风险，而不是单纯的模型能力问题。",
+        essence: "DeepMind 的重点不是再证明模型更聪明，而是开始认真处理 AI Agent 的控制权问题。未来 Agent 会接触文件、账号、消息和工具，真正的产品竞争会从能力转向权限、监控、隔离和安全边界。",
+        points: [
+          "重点不在模型又变强了，而在 Agent 未来会接触文件、账号、消息和工具。",
+          "DeepMind 的路线强调权限、监控、隔离和防御机制，思路接近网络安全。",
+          "这说明真正可用的 AI 产品，下一步竞争会转向控制权和安全边界。"
+        ],
+        what: "DeepMind 把更自主的 AI Agent 当成类似网络安全的风险对象来管理，强调监控、隔离、权限和防御。",
+        why: "当 AI 不只是聊天，而是能操作文件、工具、账号和消息时，权限控制会成为产品基础。",
+        use: "你的微信 AI 助手如果要长期用，就要区分个人、女朋友、群组的记忆和权限。",
+        url: "https://www.axios.com/2026/06/18/google-deepmind-prepares-for-rogue-ai-agents"
+      },
+      C2: {
+        title: "微信开放 AI 生态接入",
+        meta: "界面 / 东方财富 · 06-08 · 微信入口",
+        summary: "微信 AI 生态开始向小程序开放，这会影响未来用户在微信里调用服务的方式。",
+        essence: "微信 AI 生态开始向小程序开放，意味着用户未来可能不是主动找小程序，而是在微信里提出需求后由 AI 调用服务。对工具、内容、商家服务和私域自动化来说，这是一个新的入口变化。",
+        points: [
+          "开发者可以在小程序后台申请接入微信 AI，接入模式包括自动模式和开发模式。",
+          "入口逻辑会变化：不是用户先找小程序，而是微信 AI 可能主动理解需求后调用小程序。",
+          "这对工具、内容、商家服务和私域自动化都是一个新的入口机会。"
+        ],
+        what: "开发者可在小程序后台申请接入微信 AI，模式包括自动模式和开发模式。",
+        why: "重点是入口变化：以前是用户找小程序，以后可能是微信 AI 调用小程序。",
+        use: "这和你现在做微信 AI 最相关。你的早报、图片生成、个人助手都可以思考小程序化。",
+        url: "https://wap.eastmoney.com/a/202606083763593085.html"
+      },
+      C1: {
+        title: "八部门发布 AI+消费实施意见",
+        meta: "新华网 · 06-18 · AI+消费",
+        summary: "中国政策层面正在推动 AI 进入消费终端、家居、机器人、车载和服务场景。",
+        essence: "这条政策的信号很明确：AI 不只停留在软件聊天，而是要进入手机、电脑、家居、机器人、车载和线下服务。接下来消费品牌和小商家会更需要把 AI 做进客服、营销、导购和运营流程。",
+        points: [
+          "政策点名 AI 手机、智能电脑、智能电视、智能家居、AI 眼镜、机器人和车载终端。",
+          "方向不是只做软件聊天，而是把 AI 放进真实消费产品和服务流程里。",
+          "对小商家和品牌来说，AI 会变成客服、营销、导购、内容和运营工具。"
+        ],
+        what: "政策点名新一代 AI 手机、智能电脑、智能电视、智能家居、AI 眼镜、机器人、车载终端等方向。",
+        why: "这说明 AI 不只在软件里，也会进入消费品、门店、硬件和服务场景。",
+        use: "可以把门店智能客服、活动海报、短视频脚本、微信私域自动化包装成咨询服务。",
+        url: "https://www.news.cn/fortune/20260618/4bea2d9aa6e84b8db0d145ee3afbeb8e/c.html"
+      },
+      C4: {
+        title: "WAIC 2026 将在上海举行",
+        meta: "人民网 · 07-17 · 上海机会",
+        summary: "WAIC 2026 会把上海的 AI 公司、项目、岗位和合作机会集中到同一个窗口期。",
+        essence: "WAIC 2026 会把上海 AI 行业的公司、项目、岗位和合作机会集中到一个窗口期。它不只是一个展会，更适合提前做目标公司、目标岗位和潜在合作对象的清单。",
+        points: [
+          "大会计划覆盖论坛、展览、评奖、应用体验、创新孵化和招才引智。",
+          "它不只是看展，更适合作为找公司、看岗位、认识项目方的集中入口。",
+          "如果你要去上海，WAIC 可以提前做成一份目标公司和目标岗位清单。"
+        ],
+        what: "WAIC 2026 将于 7 月 17-20 日在上海举行，包含论坛、展览、评奖、应用体验、创新孵化和招才引智。",
+        why: "上海会集中出现 AI 公司、岗位、项目和合作机会。",
+        use: "你可以提前列 30 家展商、10 个目标岗位、10 个合作方向和 5 个主动联系对象。",
+        url: "https://sh.people.com.cn/n2/2026/0617/c134768-41613724.html"
+      },
+      A6: {
+        title: "NewCore 做 AI Agent 身份",
+        meta: "TechCrunch · 06-15 · Agent 基建",
+        image: "assets/news-source-A6-2026-06-20.webp",
+        summary: "NewCore 的融资说明企业级 AI Agent 开始需要身份、权限和责任系统。",
+        essence: "NewCore 做的是 AI Agent 的身份和权限基础设施，这说明企业已经不只关心模型是否聪明。真正落地时，公司会先问这个 Agent 是谁、能看什么、能做什么，以及出问题谁负责。",
+        points: [
+          "NewCore 关注 AI Agent 的身份、认证、访问权限和管理问题。",
+          "企业使用 Agent 时，核心问题会变成：它是谁、能看什么、能做什么、谁负责。",
+          "这类基础设施会成为 Agent 真正进入公司的前置条件。"
+        ],
+        what: "NewCore 获 6600 万美元融资，方向是 AI Agent 的身份、认证和权限管理。",
+        why: "企业不会只问模型聪不聪明，还会问这个智能体是谁、能看什么、出了事谁负责。",
+        use: "这是你做企业 AI 咨询时可以讲的核心观点：AI 落地先做权限、流程和审计。",
+        url: "https://techcrunch.com/2026/06/15/ai-agents-are-becoming-employees-newcore-emerges-with-66m-to-give-them-identities/"
       },
       G3: {
         title: "英国拟限制未成年人社交媒体",
         meta: "AP · 06-15 · 平台监管",
+        image: "assets/news-source-G3-2026-06-20.jpg",
+        summary: "英国对未成年人社交媒体使用的限制讨论，会继续推高平台合规和年龄验证要求。",
+        essence: "英国对未成年人社交媒体使用的限制讨论，核心是平台责任正在变重。年龄验证、隐私保护、推荐算法和内容治理都会成为内容产品必须提前考虑的底层约束。",
+        points: [
+          "政策方向是减少未成年人接触部分社交媒体应用和有害内容的风险。",
+          "平台需要面对年龄验证、隐私保护、推荐算法和内容治理的多重约束。",
+          "这类监管会影响所有面向青少年或大众内容产品的设计边界。"
+        ],
         what: "英国政府计划限制 16 岁以下未成年人使用部分社交媒体应用。",
         why: "年龄验证、隐私保护、推荐算法和青少年内容合规，会成为内容产品的硬约束。",
         use: "如果以后做内容产品或微信小程序，面向未成年人时要提前考虑合规边界。",
@@ -687,54 +908,44 @@
       A1: {
         title: "Anthropic 进入国家安全讨论",
         meta: "Axios · 06-19 · 前沿模型",
+        summary: "Anthropic 被放进国家安全语境，说明顶级 AI 公司已经进入政策和安全竞争层面。",
+        essence: "Anthropic 被放进国家安全语境，说明顶级 AI 公司已经不只是普通创业公司。前沿模型会越来越像关键基础设施，受到政策、安全、出口限制和政府采购等因素影响。",
+        points: [
+          "围绕前沿模型公司的讨论，已经不只是产品能力和融资估值。",
+          "国家安全、出口限制、政府采购和模型可控性都会影响公司命运。",
+          "顶级模型会越来越像关键基础设施，而不是普通互联网产品。"
+        ],
         what: "Axios 报道，特朗普称曾将 Anthropic 视为国家安全威胁。",
         why: "顶级模型公司已经不只是创业公司，而是进入政策、安全、出口控制和国家能力竞争体系。",
         use: "你选择模型和 API 时，不能只看效果，也要考虑可用性、地区限制和长期稳定性。",
         url: "https://www.axios.com/2026/06/19/trump-anthropic-national-security-the-axios-show"
       },
-      A3: {
-        title: "DeepMind AI Control Roadmap",
-        meta: "Axios · 06-18 · AI 安全",
-        what: "DeepMind 把更自主的 AI Agent 当成类似网络安全的风险对象来管理，强调监控、隔离、权限和防御。",
-        why: "当 AI 不只是聊天，而是能操作文件、工具、账号和消息时，权限控制会成为产品基础。",
-        use: "你的微信 AI 助手如果要长期用，就要区分个人、女朋友、群组的记忆和权限。",
-        url: "https://www.axios.com/2026/06/18/google-deepmind-prepares-for-rogue-ai-agents"
-      },
-      A6: {
-        title: "NewCore 做 AI Agent 身份",
-        meta: "TechCrunch · 06-15 · Agent 基建",
-        what: "NewCore 获 6600 万美元融资，方向是 AI Agent 的身份、认证和权限管理。",
-        why: "企业不会只问模型聪不聪明，还会问这个智能体是谁、能看什么、能改什么、出了事谁负责。",
-        use: "这是你做企业 AI 咨询时可以讲的核心观点：AI 落地先做权限、流程和审计。",
-        url: "https://techcrunch.com/2026/06/15/ai-agents-are-becoming-employees-newcore-emerges-with-66m-to-give-them-identities/"
-      },
-      C1: {
-        title: "八部门发布 AI+消费实施意见",
-        meta: "新华网 · 06-18 · AI+消费",
-        what: "政策点名新一代 AI 手机、智能电脑、智能电视、智能家居、AI 眼镜、机器人、车载终端等方向。",
-        why: "这说明 AI 不只在软件里，也会进入消费品、门店、硬件和服务场景。",
-        use: "可以把门店智能客服、活动海报、短视频脚本、微信私域自动化包装成咨询服务。",
-        url: "https://www.news.cn/fortune/20260618/4bea2d9aa6e84b8db0d145ee3afbeb8e/c.html"
-      },
-      C2: {
-        title: "微信开放 AI 生态接入",
-        meta: "界面 / 东方财富 · 06-08 · 微信入口",
-        what: "开发者可在小程序后台申请接入微信 AI，模式包括自动模式和开发模式。",
-        why: "重点是入口变化：以前是用户找小程序，以后可能是微信 AI 调用小程序。",
-        use: "这和你现在做微信 AI 最相关。你的早报、图片生成、个人助手都可以思考小程序化。",
-        url: "https://wap.eastmoney.com/a/202606083763593085.html"
-      },
-      C4: {
-        title: "WAIC 2026 上海",
-        meta: "人民网 · 06-17 · 上海机会",
-        what: "WAIC 2026 将于 7 月 17-20 日在上海举行，包含论坛、展览、评奖、应用体验、创新孵化和招才引智。",
-        why: "上海会集中出现 AI 公司、岗位、项目和合作机会。",
-        use: "你可以提前列 30 家展商、10 个目标岗位、10 个合作方向和 5 个主动联系对象。",
-        url: "https://sh.people.com.cn/n2/2026/0617/c134768-41613724.html"
+      G1: {
+        title: "G7 支持美伊阶段性协议",
+        meta: "AP · 06-17 · 全球大事",
+        image: "assets/news-source-G1-2026-06-20.jpg",
+        summary: "G7 对美伊阶段性安排的支持，会影响中东局势、能源通道和全球市场风险偏好。",
+        essence: "G7 对美伊阶段性安排的态度，会影响中东局势、能源通道和全球市场风险偏好。能源价格和科技估值并不是两件完全分开的事，AI 数据中心和算力建设也会受到能源变量影响。",
+        points: [
+          "核心变量包括伊朗、核问题、霍尔木兹海峡和能源运输安全。",
+          "如果局势缓和，能源价格和市场风险偏好可能改善；如果反复，科技股也会受影响。",
+          "AI 基建依赖电力和数据中心，能源价格变化会传导到科技投资。"
+        ],
+        what: "G7 领导人支持美国与伊朗的阶段性安排，焦点包括霍尔木兹海峡、能源通道和后续核协议。",
+        why: "这会影响能源价格、风险偏好和科技市场估值。AI 基建、电力和数据中心也会受能源价格影响。",
+        use: "这类全球变量不用每天深挖，但早报需要保留，因为它会影响市场情绪和大厂投资节奏。",
+        url: "https://apnews.com/article/2b13227bfc63d5c7c92c64488e3e2753"
       },
       P1: {
         title: "ReleaseDock 工作台化",
         meta: "Product Hunt · 今日 · 产品工具",
+        summary: "ReleaseDock 代表一种产品趋势：AI 工具正在从单点能力，变成围绕工作流的统一工作台。",
+        essence: "ReleaseDock 代表一种产品趋势：AI 工具正在从单点按钮变成完整工作台。用户真正需要的不是一个聊天入口，而是从收集、处理、回复到发布的连续流程。",
+        points: [
+          "它把 AI 客服、帮助中心、更新日志和反馈处理放在同一套界面里。",
+          "用户真正需要的不是一个 AI 按钮，而是从收集、处理到发布的完整流程。",
+          "这类工具更像运营工作台，而不是传统意义上的聊天机器人。"
+        ],
         what: "ReleaseDock 把 AI 客服、帮助中心、更新日志放进一个收件箱。",
         why: "B2B 工具正在从单点 AI 功能变成工作台，用户需要的是整套流程。",
         use: "你的早报和微信 AI 也可以做成工作台逻辑：收集、整理、追问、归档、生成网页。",
@@ -743,6 +954,14 @@
       P4: {
         title: "GEO / AI 搜索推荐",
         meta: "极客公园 · 近期 · 商业机会",
+        image: "assets/news-source-P4-2026-06-20.png",
+        summary: "GEO 的核心是让品牌和内容不只被搜索引擎看到，也能被 AI 系统理解和推荐。",
+        essence: "GEO 的核心是让品牌和内容不只被搜索引擎看到，也能被 AI 系统理解和推荐。企业需要把产品信息、FAQ、案例和结构化内容整理清楚，未来才更容易被 AI 引用和推荐。",
+        points: [
+          "过去企业做 SEO，是为了让用户在搜索结果里看到自己。",
+          "现在 AI 搜索和智能体会先理解、筛选、总结，再把结果推荐给用户。",
+          "企业需要把产品信息、FAQ、案例和结构化内容整理得更适合 AI 读取。"
+        ],
         what: "企业正在从“被搜索引擎搜到”转向“被 AI 智能体选中”。",
         why: "AI 搜索会改变品牌曝光方式，内容不只是给人看，也要给 AI 理解和引用。",
         use: "这可以做成 AI 咨询服务：帮小商家整理内容、FAQ、产品信息，让 AI 更容易推荐。",
@@ -750,42 +969,196 @@
       }
     };
 
+    const audio = document.getElementById("briefAudio");
+    const playButton = document.getElementById("playButton");
+    const coverImage = document.getElementById("coverImage");
+    const miniPlayer = document.getElementById("miniPlayer");
+    const miniToggle = document.getElementById("miniToggle");
+    const miniMeta = document.getElementById("miniMeta");
+    const miniProgress = document.getElementById("miniProgress");
+    let playerHasStarted = false;
+
+    function clampChannel(value) {
+      return Math.max(0, Math.min(255, Math.round(value)));
+    }
+
+    function mixColor(color, target, amount) {
+      return color.map((channel, index) => clampChannel(channel * (1 - amount) + target[index] * amount));
+    }
+
+    function chooseCoverTint(image) {
+      try {
+        const canvas = document.createElement("canvas");
+        const size = 56;
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (!context) return;
+        context.drawImage(image, 0, 0, size, size);
+        const pixels = context.getImageData(0, 0, size, size).data;
+        const buckets = new Map();
+        for (let i = 0; i < pixels.length; i += 16) {
+          const r = pixels[i];
+          const g = pixels[i + 1];
+          const b = pixels[i + 2];
+          const a = pixels[i + 3];
+          if (a < 200) continue;
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const saturation = max === 0 ? 0 : (max - min) / max;
+          const lightness = (max + min) / 510;
+          if (lightness > .86 || lightness < .08 || saturation < .08) continue;
+          const key = `${Math.round(r / 24) * 24},${Math.round(g / 24) * 24},${Math.round(b / 24) * 24}`;
+          buckets.set(key, (buckets.get(key) || 0) + 1 + saturation * 2);
+        }
+        const dominant = [...buckets.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+        if (!dominant) return;
+        const rgb = dominant.split(",").map(Number);
+        const deep = mixColor(rgb, [2, 2, 4], .58);
+        const soft = mixColor(rgb, [18, 18, 22], .36);
+        document.documentElement.style.setProperty("--cover-panel-rgb", deep.join(", "));
+        document.documentElement.style.setProperty("--cover-panel-soft-rgb", soft.join(", "));
+      } catch {
+        document.documentElement.style.setProperty("--cover-panel-rgb", "24, 28, 44");
+        document.documentElement.style.setProperty("--cover-panel-soft-rgb", "43, 49, 70");
+      }
+    }
+
+    if (coverImage.complete) {
+      chooseCoverTint(coverImage);
+    } else {
+      coverImage.addEventListener("load", () => chooseCoverTint(coverImage), { once: true });
+    }
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds) || seconds <= 0) return "0:00";
+      const minutes = Math.floor(seconds / 60);
+      const remaining = Math.floor(seconds % 60).toString().padStart(2, "0");
+      return `${minutes}:${remaining}`;
+    }
+
+    async function toggleAudio() {
+      if (audio.paused) {
+        await audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    function updatePlayerState() {
+      const isPlaying = !audio.paused && !audio.ended;
+      const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+      const progress = duration > 0 ? Math.min(100, Math.max(0, (audio.currentTime / duration) * 100)) : 0;
+      const shouldShow = playerHasStarted && !audio.ended;
+
+      playButton.classList.toggle("playing", isPlaying);
+      miniToggle.classList.toggle("playing", isPlaying);
+      document.body.classList.toggle("player-visible", shouldShow);
+      miniPlayer.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+      miniProgress.style.width = `${progress}%`;
+
+      if (isPlaying) {
+        miniMeta.textContent = `${formatTime(audio.currentTime)} / ${formatTime(duration)}`;
+      } else if (shouldShow) {
+        miniMeta.textContent = `已暂停 · ${formatTime(audio.currentTime)} / ${formatTime(duration)}`;
+      } else {
+        miniMeta.textContent = "准备播放";
+      }
+    }
+
+    playButton.addEventListener("click", toggleAudio);
+    miniToggle.addEventListener("click", toggleAudio);
+    audio.addEventListener("loadedmetadata", updatePlayerState);
+    audio.addEventListener("timeupdate", updatePlayerState);
+    audio.addEventListener("play", () => {
+      playerHasStarted = true;
+      updatePlayerState();
+    });
+    audio.addEventListener("pause", updatePlayerState);
+    audio.addEventListener("ended", () => {
+      playerHasStarted = false;
+      audio.currentTime = 0;
+      updatePlayerState();
+    });
+
+    if (new URLSearchParams(window.location.search).get("player") === "preview") {
+      playerHasStarted = true;
+      miniMeta.textContent = "0:37 / 11:35";
+      miniProgress.style.width = "5%";
+      document.body.classList.add("player-visible");
+      miniPlayer.setAttribute("aria-hidden", "false");
+    }
+
     const modal = document.getElementById("newsModal");
     const closeButton = document.getElementById("modalClose");
+    const modalHero = document.querySelector(".modal-hero");
+    const modalImage = document.getElementById("modalImage");
     const modalTitle = document.getElementById("modalTitle");
     const modalMeta = document.getElementById("modalMeta");
-    const modalWhat = document.getElementById("modalWhat");
-    const modalWhy = document.getElementById("modalWhy");
-    const modalUse = document.getElementById("modalUse");
+    const modalDetail = document.getElementById("modalDetail");
     const modalLink = document.getElementById("modalLink");
+    const pageRoot = document.querySelector(".page");
     let lastFocusedCard = null;
+
+    function detailParagraphs(item) {
+      const paragraphs = [
+        item.essence || item.summary,
+        item.summary && item.summary !== item.essence ? item.summary : "",
+        item.what,
+        ...(item.points || []),
+        item.why
+      ].filter(Boolean);
+      return [...new Set(paragraphs)].slice(0, 6);
+    }
 
     function openModal(id, trigger) {
       const item = newsData[id];
       if (!item) return;
       lastFocusedCard = trigger;
+      if (item.image) {
+        modalHero.classList.remove("no-image");
+        modalImage.src = item.image;
+        modalImage.alt = `${item.title} 来源图片`;
+      } else {
+        modalHero.classList.add("no-image");
+        modalImage.removeAttribute("src");
+        modalImage.alt = "";
+      }
       modalTitle.textContent = item.title;
       modalMeta.textContent = item.meta;
-      modalWhat.textContent = item.what;
-      modalWhy.textContent = item.why;
-      modalUse.textContent = item.use;
+      modalDetail.replaceChildren();
+      detailParagraphs(item).forEach((text) => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = text;
+        modalDetail.appendChild(paragraph);
+      });
       modalLink.href = item.url;
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
       document.body.style.overflow = "hidden";
-      closeButton.focus();
+      pageRoot.setAttribute("aria-hidden", "true");
+      pageRoot.inert = true;
     }
 
     function closeModal() {
       modal.classList.remove("open");
       modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
       document.body.style.overflow = "";
+      pageRoot.removeAttribute("aria-hidden");
+      pageRoot.inert = false;
       if (lastFocusedCard) lastFocusedCard.focus();
     }
 
     document.querySelectorAll("[data-news-id]").forEach((card) => {
       card.addEventListener("click", () => openModal(card.dataset.newsId, card));
     });
+    const initialNewsId = new URLSearchParams(window.location.search).get("news");
+    if (initialNewsId && newsData[initialNewsId]) {
+      const initialCard = document.querySelector(`[data-news-id="${initialNewsId}"]`);
+      requestAnimationFrame(() => openModal(initialNewsId, initialCard));
+    }
     closeButton.addEventListener("click", closeModal);
     modal.addEventListener("click", (event) => {
       if (event.target === modal) closeModal();
@@ -793,7 +1166,6 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && modal.classList.contains("open")) closeModal();
     });
-
   </script>
 </body>
 </html>
